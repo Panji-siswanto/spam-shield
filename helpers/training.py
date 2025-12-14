@@ -6,9 +6,9 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import MultinomialNB
 
 try:
     stopwords.words("english")
@@ -39,7 +39,7 @@ def clean_data(data):
 
 
 def vectorize_data(corpus, data):
-    vectorizer = CountVectorizer()
+    vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=2, max_df=0.95)
     mail = vectorizer.fit_transform(corpus)
     label = data.label_num.values
 
@@ -51,7 +51,7 @@ def vectorize_data(corpus, data):
 
 
 def train_model(mail_train, label_train):
-    model = RandomForestClassifier(n_jobs=-1)
+    model = MultinomialNB()
     model.fit(mail_train, label_train)
     return model
 

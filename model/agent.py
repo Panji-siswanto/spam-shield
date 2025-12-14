@@ -16,20 +16,21 @@ from helpers.training import (
 
 class SpamAgent:
     def __init__(self):
-        # laod model & vectorizer
+        # Ensure model & vectorizer exist, train if needed
         SpamAgent.ensure()
         self.model = joblib.load(config.MODEL_PATH)
         self.vectorizer = joblib.load(config.VECTORIZER_PATH)
 
     @staticmethod
     def ensure():
-        # check if model & vectorizer exist if not, train the model
+        """
+        Ensure trained model and vectorizer exist.
+        Train and save if not.
+        """
         model_exists = os.path.exists(config.MODEL_PATH)
         vectorizer_exists = os.path.exists(config.VECTORIZER_PATH)
         if model_exists and vectorizer_exists:
             return
-
-        print("Trained model not found. Training now...")
 
         df = reader(config.DATA_PATH)
         corpus = clean_data(df)
@@ -79,4 +80,31 @@ class SpamAgent:
         return {
             "ham": proba[0],
             "spam": proba[1],
+        }
+
+    def smart_predict(self, text: str, threshold: float = 0.75) -> dict:
+        """
+         prediction confidence threshold.
+        Returns:
+            {
+                "label": "Spam" | "Ham" | "Uncertain",
+                "spam_prob": float,
+                "ham_prob": float
+            }
+        """
+        proba = self.predict_proba(text)
+        spam_prob = proba["spam"]
+        ham_prob = proba["ham"]
+
+        if spam_prob >= threshold:
+            label = "Spam"
+        elif ham_prob >= threshold:
+            label = "Ham"
+        else:
+            label = "Uncertain"
+
+        return {
+            "label": label,
+            "spam_prob": spam_prob,
+            "ham_prob": ham_prob,
         }
