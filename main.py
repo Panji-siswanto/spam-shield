@@ -1,6 +1,3 @@
-def main():
-    print("Hello from spam-shield!")
+from helpers import training
 
-
-if __name__ == "__main__":
-    main()
+df = training.reader("data/spam_ham_dataset.csv")
