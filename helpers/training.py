@@ -40,13 +40,14 @@ def clean_data(data):
 
 def vectorize_data(corpus, data):
     vectorizer = CountVectorizer()
-
-    mail = vectorizer.fit_transform(corpus).toarray()
+    mail = vectorizer.fit_transform(corpus)
     label = data.label_num.values
+
     mail_train, mail_test, label_train, label_test = train_test_split(
         mail, label, test_size=0.2
     )
-    return mail_train, mail_test, label_train, label_test
+
+    return vectorizer, mail_train, mail_test, label_train, label_test
 
 
 def train_model(mail_train, label_train):
