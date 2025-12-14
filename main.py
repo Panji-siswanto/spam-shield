@@ -4,7 +4,7 @@ from model.agent import SpamAgent
 def test_agent():
     agent = SpamAgent()
 
-    sample_ham = "Please review the attached document and let me know your feedback."
+    sample_ham = "hello."
     sample_spam = "Congratulations! You've won a $1,000 Walmart gift card. Click here to claim your prize."
 
     samples = [
@@ -12,12 +12,15 @@ def test_agent():
         sample_spam,
     ]
     for sample in samples:
-        proba = agent.predict_proba(sample)
-        pred = agent.predict(sample)
-        print(f"Input: {sample}")
-        print(f"Confidence : Spam {proba['spam']:.2%} | Ham {proba['ham']:.2%}")
-        print(f"Prediction: {'Spam' if pred == 1 else 'Ham'}")
-        print("-" * 30)
+        result = agent.smart_predict(sample, threshold=0.75)
+
+        print("=" * 60)
+        print(f"Input      : {sample}")
+        print(f"Prediction : {result['label']}")
+        print(
+            f"Confidence : Spam {result['spam_prob']:.2%} | "
+            f"Ham {result['ham_prob']:.2%}"
+        )
 
 
 def user_input():
@@ -26,15 +29,16 @@ def user_input():
         user_text = input("Enter email text (or 'exit' to quit): ")
         if user_text.lower() == "exit":
             break
-
-        proba = agent.predict_proba(user_text)
-        pred = agent.predict(user_text)
+        result = agent.smart_predict(user_text, threshold=0.75)
 
         print(f"Input: {user_text}")
-        print(f"Confidence : Spam {proba['spam']:.2%} | Ham {proba['ham']:.2%}")
-        print(f"Prediction: {'Spam' if pred == 1 else 'Ham'}")
-        print("-" * 30)
+        print(f"\nPrediction : {result['label']}")
+        print(
+            f"Confidence : Spam {result['spam_prob']:.2%} | "
+            f"Ham {result['ham_prob']:.2%}"
+        )
+        print("-" * 60)
 
 
 if __name__ == "__main__":
-    user_input()
+    test_agent()
