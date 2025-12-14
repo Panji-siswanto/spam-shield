@@ -1,25 +1,4 @@
-from helpers import training
-import config
-import joblib
 from model.agent import SpamAgent
-
-
-def debug():
-    df = training.reader(config.DATA_PATH)
-    corpus = training.clean_data(df)
-    vectorizer, mail_train, mail_test, label_train, label_test = (
-        training.vectorize_data(corpus, df)
-    )
-    model = training.train_model(mail_train, label_train)
-    accuracy = training.evaluate_model(model, mail_test, label_test)
-
-    joblib.dump(model, config.MODEL_PATH)
-    joblib.dump(vectorizer, config.VECTORIZER_PATH)
-
-    print("Training completed")
-    print(f"Accuracy: {accuracy:.4f}")
-    print("Model & vectorizer saved")
-    print("-" * 30)
 
 
 def test_agent():
@@ -41,6 +20,21 @@ def test_agent():
         print("-" * 30)
 
 
+def user_input():
+    agent = SpamAgent()
+    while True:
+        user_text = input("Enter email text (or 'exit' to quit): ")
+        if user_text.lower() == "exit":
+            break
+
+        proba = agent.predict_proba(user_text)
+        pred = agent.predict(user_text)
+
+        print(f"Input: {user_text}")
+        print(f"Confidence : Spam {proba['spam']:.2%} | Ham {proba['ham']:.2%}")
+        print(f"Prediction: {'Spam' if pred == 1 else 'Ham'}")
+        print("-" * 30)
+
+
 if __name__ == "__main__":
-    debug()
-    test_agent()
+    user_input()
