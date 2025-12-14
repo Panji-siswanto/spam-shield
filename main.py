@@ -12,7 +12,7 @@ def test_agent():
         sample_spam,
     ]
     for sample in samples:
-        result = agent.smart_predict(sample, threshold=0.75)
+        result = agent.smart_predict(sample)
 
         print("=" * 60)
         print(f"Input      : {sample}")
@@ -42,3 +42,5 @@ def user_input():
 
 if __name__ == "__main__":
     SpamAgent.retrain()
+    test_agent()
+    # user_input()

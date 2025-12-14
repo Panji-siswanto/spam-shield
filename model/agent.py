@@ -10,7 +10,8 @@ from helpers.training import (
     clean_data,
     vectorize_data,
     train_model,
-    evaluate_model,
+    # evaluate_model,
+    evaluate_detailed,
 )
 
 
@@ -38,7 +39,9 @@ class SpamAgent:
             corpus, df
         )
         model = train_model(mail_train, label_train)
-        accuracy = evaluate_model(model, mail_test, label_test)
+        # accuracy = evaluate_model(model, mail_test, label_test)
+        evaluate_detailed(model, mail_test, label_test)
+        accuracy = model.score(mail_test, label_test)
 
         joblib.dump(model, config.MODEL_PATH)
         joblib.dump(vectorizer, config.VECTORIZER_PATH)
@@ -100,7 +103,7 @@ class SpamAgent:
             "spam": proba[1],
         }
 
-    def smart_predict(self, text: str, threshold: float = 0.75) -> dict:
+    def smart_predict(self, text: str, threshold: float = 0.62) -> dict:
         """
          prediction confidence threshold.
         Returns:
