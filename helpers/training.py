@@ -23,13 +23,24 @@ def reader(path):
 
 
 def clean_data(data):
+    # Ensure text column exists
+    if "text" not in data.columns:
+        raise ValueError("Dataset must contain a 'text' column")
+
+    # Drop rows with missing text
+    data = data.dropna(subset=["text"])
+
+    # Force text to string (handles floats safely)
+    data["text"] = data["text"].astype(str)
+
+    # Normalize line breaks
     data["text"] = data["text"].apply(lambda x: x.replace("\r\n", " "))
 
     stopwords_set = set(stopwords.words("english"))
     corpus = []
 
-    for i in range(len(data)):
-        text = data["text"].iloc[i].lower()
+    for text in data["text"]:
+        text = text.lower()
         text = text.translate(str.maketrans("", "", string.punctuation)).split()
         text = [stemmer.stem(word) for word in text if word not in stopwords_set]
         corpus.append(" ".join(text))
@@ -63,3 +74,21 @@ def train_model(mail_train, label_train):
 def evaluate_model(model, mail_test, label_test):
     accuray = model.score(mail_test, label_test)
     return accuray
+
+
+def load_and_merge_datasets(paths):
+    dfs = []
+
+    for path in paths:
+        df = pd.read_csv(path)
+        dfs.append(df)
+
+    merged_df = pd.concat(dfs, ignore_index=True)
+
+    # Drop rows with missing text or label
+    merged_df = merged_df.dropna(subset=["text", "label_num"])
+
+    # Shuffle
+    merged_df = merged_df.sample(frac=1, random_state=42).reset_index(drop=True)
+
+    return merged_df

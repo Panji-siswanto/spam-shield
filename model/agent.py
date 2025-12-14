@@ -1,4 +1,4 @@
-# model/agent.py
+from helpers.training import load_and_merge_datasets
 
 import os
 import joblib
@@ -32,7 +32,7 @@ class SpamAgent:
         if model_exists and vectorizer_exists:
             return
 
-        df = reader(config.DATA_PATH)
+        df = load_and_merge_datasets(config.DATASETS)
         corpus = clean_data(df)
         vectorizer, mail_train, mail_test, label_train, label_test = vectorize_data(
             corpus, df
@@ -45,6 +45,24 @@ class SpamAgent:
 
         print(f"Training completed | Accuracy: {accuracy:.4f}")
         print("Model & vectorizer saved")
+
+    @staticmethod
+    def retrain():
+        """
+        Force retraining of the model.
+        Deletes existing artifacts and retrains from scratch.
+        """
+        # Delete old artifacts if they exist
+        if os.path.exists(config.MODEL_PATH):
+            os.remove(config.MODEL_PATH)
+
+        if os.path.exists(config.VECTORIZER_PATH):
+            os.remove(config.VECTORIZER_PATH)
+
+        print("Old model artifacts deleted. Retraining...")
+
+        # Reuse ensure() to train again
+        SpamAgent.ensure()
 
     def _prepare(self, text: str):
         """
