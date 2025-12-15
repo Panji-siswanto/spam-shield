@@ -12,6 +12,7 @@ DATASETS = [
     os.path.join(DATA_DIR, "spam_ham_dataset.csv"),
     os.path.join(DATA_DIR, "spam_sms.csv"),
     os.path.join(DATA_DIR, "train.csv"),
+    os.path.join(DATA_DIR, "email_origin.csv"),
 ]
 
 MODEL_PATH = os.path.join(OUTPUT_DIR, "spam_model.pkl")

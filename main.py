@@ -15,7 +15,7 @@ def test_agent():
         result = agent.smart_predict(sample)
 
         print("=" * 60)
-        print(f"Input      : {sample}")
+        print(f'Input      : "{sample}"')
         print(f"Prediction : {result['label']}")
         print(
             f"Confidence : Spam {result['spam_prob']:.2%} | "
@@ -41,6 +41,6 @@ def user_input():
 
 
 if __name__ == "__main__":
-    SpamAgent.retrain()
+    # SpamAgent.retrain()
     test_agent()
     # user_input()
