@@ -41,6 +41,6 @@ def user_input():
 
 
 if __name__ == "__main__":
-    # SpamAgent.retrain()
-    test_agent()
+    SpamAgent.retrain()
+    # test_agent()
     # user_input()

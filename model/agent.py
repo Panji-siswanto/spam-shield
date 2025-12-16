@@ -6,7 +6,7 @@ import pandas as pd
 
 import config
 from helpers.training import (
-    reader,
+    # reader,
     clean_data,
     vectorize_data,
     train_model,
