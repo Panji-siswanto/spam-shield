@@ -9,21 +9,25 @@ __pycache__/
 # Virtual environments
 # ======================
 .venv/
-env/
 venv/
+env/
 
 # ======================
-# ML artifacts / outputs
+# ML artifacts / outputs (DO NOT COMMIT)
 # ======================
 output/
 *.pkl
 *.pt
 *.bin
 *.ckpt
+*.safetensors
 
+# ======================
 # HuggingFace / Torch cache
+# ======================
 .cache/
 hf_cache/
+torch_cache/
 
 # ======================
 # Logs & reports
