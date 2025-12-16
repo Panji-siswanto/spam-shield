@@ -1,45 +1,65 @@
 spam-shield/
-├── data/                         # Datasets
-│   ├── email_origin.csv
+├── data/                         # CSV datasets
+│   ├── email_text.csv
 │   ├── spam_ham_dataset.csv
 │   ├── spam_sms.csv
 │   └── train.csv
 │
-├── helpers/                      # Training & utilities
-│   ├── bert/                     # BERT-related helpers
-│   │   ├── dataset.py            # PyTorch dataset for BERT
-│   │   ├── tokenizer.py          # DistilBERT tokenizer
-│   │   └── training.py           # BERT fine-tuning logic
+├── helpers/                      # Training & preprocessing logic
+│   ├── bert/
+│   │   ├── bert_trainer.py       # DistilBERT fine-tuning
+│   │   ├── dataset.py            # PyTorch Dataset for BERT
+│   │   └── prediction.py         # (Optional) BERT utilities
 │   │
-│   └── naive_bayes/              # Classical ML helpers
-│       ├── training.py           # TF-IDF + Naive Bayes training
-│       └── evaluation.py         # Evaluation metrics & reports
+│   └── naive_bayes/
+│       └── nb_trainer.py         # TF-IDF + Naive Bayes training
 │
-├── model/                        # Inference-only model interfaces
-│   ├── agent.py                  # SpamAgent (TF-IDF + Naive Bayes)
-│   └── bert_agent.py             # BertSpamAgent (DistilBERT)
+├── model/                        # Inference-only agents
+│   ├── nb_agent.py               # Naive Bayes inference
+│   ├── bert_agent.py             # DistilBERT inference
+│   └── hybrid_agent.py           # Hybrid (NB + BERT)
 │
-├── output/                       # Model artifacts (gitignored)
+├── output/                       # Trained models (gitignored)
 │   ├── naive_bayes/
 │   │   ├── spam_model.pkl
 │   │   └── vectorizer.pkl
-│   │
-│   └── bert/                     # Fine-tuned BERT model files
+│   └── bert/
 │       ├── config.json
 │       ├── pytorch_model.bin
 │       └── tokenizer.json
 │
-├── .gitignore
-├── .python-version
+├── train_all.py                  # Train all models
+├── main_nb.py                    # Run Naive Bayes demo
+├── main_bert.py                  # Run DistilBERT demo
+├── main_hybrid.py                # Run Hybrid demo
+│
 ├── config.py                     # Global configuration
-├── main.py                       # Entry point / demo
-├── pyproject.toml
-├── README.md
-├── spam-shield.code-workspace
-└── uv.lock
+├── .gitignore
+├── pyproject
+
+helpers/ -> training & preprocessing
+model/ -> inference only
+output/ -> generated models (not pushed to Git)
+config,py -> stores All paths and hyperparameters
+
+
+to run models:
+naive bayes 
+ "uv run python main_nb.py" /"python main_nb.py"
+DistilBERT 
+ "uv run python main_bert.py" /"python main_bert.py"
+Hybrid Model 
+ "uv run python main_hybrid.py" / "python main_hybrid.py"
+
+on pull, the output folders will be empty and to initiate models training, run:
+ "uv run python train_all.py"
+
+
+
+
 
 
 Datasets:
     spam_ham_dataset.csv // https://www.kaggle.com/datasets/venky73/spam-mails-dataset?resource=download
     spam_sms.csv // https://www.kaggle.com/datasets/thedevastator/sms-spam-collection-a-more-diverse-dataset
-    email_origin //https://www.kaggle.com/datasets/bayes2003/emails-for-spam-or-ham-classification-enron-2006
+    email_text.csv //https://www.kaggle.com/datasets/bayes2003/emails-for-spam-or-ham-classification-enron-2006

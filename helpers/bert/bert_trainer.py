@@ -35,6 +35,8 @@ def load_and_merge_datasets(paths):
 
 
 def train():
+    config.ensure_dirs()
+
     print("Loading datasets...")
     df = load_and_merge_datasets(config.DATASETS)
 
