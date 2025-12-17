@@ -1,0 +1,13 @@
+
+//Make function to concat strings and before predicting it.
+"gather multiple chat bubble before putting it through.
+why?
+if they sends
+   "You have been selected for a free gift card. Act now or your reward will expire today."
+as an opening bubble even the bert model will think it's a HAM because lacks of context.
+tricked by sending multiple bubbles.
+    Bot: Congratulations! You have been selected for a free gift card.
+    Bot: Act now or your reward will expire today.
+    Bot: Click this link to claim it.
+and that's a clear spam, couldn't be detected from first bubble alone
+"

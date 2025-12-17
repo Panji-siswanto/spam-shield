@@ -1,41 +1,43 @@
 spam-shield/
-├── data/                         # CSV datasets
+│
+├── api/                          # FastAPI backend
+│   ├── main.py                   # API launcher
+│   ├── schemas.py                # Request/response schemas
+│   ├── nb_routes.py              # Naive Bayes endpoints
+│   ├── bert_routes.py            # BERT endpoints
+│   └── hybrid_routes.py          # Hybrid endpoints
+│
+├── data/                         # Datasets (CSV)
 │   ├── email_text.csv
 │   ├── spam_ham_dataset.csv
 │   ├── spam_sms.csv
 │   └── train.csv
 │
-├── helpers/                      # Training & preprocessing logic
+├── helpers/                      # Training utilities
 │   ├── bert/
 │   │   ├── bert_trainer.py       # DistilBERT fine-tuning
-│   │   ├── dataset.py            # PyTorch Dataset for BERT
-│   │   └── prediction.py         # (Optional) BERT utilities
+│   │   ├── dataset.py            # PyTorch Dataset
 │   │
 │   └── naive_bayes/
-│       └── nb_trainer.py         # TF-IDF + Naive Bayes training
+│       ├── nb_trainer.py         # TF-IDF + MultinomialNB training
+│       └── evaluation.py         # Precision / Recall / F1 / Accuracy
 │
 ├── model/                        # Inference-only agents
-│   ├── nb_agent.py               # Naive Bayes inference
-│   ├── bert_agent.py             # DistilBERT inference
-│   └── hybrid_agent.py           # Hybrid (NB + BERT)
+│   ├── nb_agent.py               # Naive Bayes agent
+│   ├── bert_agent.py             # DistilBERT agent
+│   └── hybrid_agent.py           # Hybrid agent
 │
-├── output/                       # Trained models (gitignored)
-│   ├── naive_bayes/
-│   │   ├── spam_model.pkl
-│   │   └── vectorizer.pkl
+├── output/                       # Model artifacts (gitignored)
+│   ├── naive_bayes/   
+│   │
 │   └── bert/
-│       ├── config.json
-│       ├── pytorch_model.bin
-│       └── tokenizer.json
 │
+├── main_nb.py                    # Run NB prediction locally
+├── main_bert.py                  # Run BERT prediction locally
+├── main_hybrid.py                # Run Hybrid prediction locally
 ├── train_all.py                  # Train all models
-├── main_nb.py                    # Run Naive Bayes demo
-├── main_bert.py                  # Run DistilBERT demo
-├── main_hybrid.py                # Run Hybrid demo
 │
-├── config.py                     # Global configuration
-├── .gitignore
-├── pyproject
+└──config.py                     # Global configuration
 
 helpers/ -> training & preprocessing
 model/ -> inference only
@@ -53,6 +55,17 @@ Hybrid Model
 
 on pull, the output folders will be empty and to initiate models training, run:
  "uv run python train_all.py"
+
+
+APIs:
+to initate:
+ "uv run uvicorn api.api:app --reload"
+NB:
+POST http://127.0.0.1:8000/predict/nb
+BERT:
+POST http://127.0.0.1:8000/predict/bert
+Hybrid:
+POST http://127.0.0.1:8000/predict/hybrid
 
 
 
