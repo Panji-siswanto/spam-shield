@@ -16,9 +16,7 @@ from sklearn.metrics import (
     precision_recall_fscore_support,
 )
 
-# ======================
 # NLTK setup
-# ======================
 try:
     stopwords.words("english")
 except LookupError:
@@ -27,9 +25,7 @@ except LookupError:
 stemmer = PorterStemmer()
 
 
-# ======================
 # Text preprocessing
-# ======================
 def clean_data(data: pd.DataFrame):
     if "text" not in data.columns:
         raise ValueError("Dataset must contain a 'text' column")
@@ -50,9 +46,7 @@ def clean_data(data: pd.DataFrame):
     return corpus
 
 
-# ======================
-# Dataset loading
-# ======================
+# loading dataset
 def load_and_merge_datasets(paths):
     dfs = []
 
@@ -79,9 +73,7 @@ def load_and_merge_datasets(paths):
     return merged
 
 
-# ======================
 # Training entry point
-# ======================
 def train():
     print("Training Naive Bayes model...")
 
@@ -149,6 +141,5 @@ def train():
     print("\nNaive Bayes training completed")
 
 
-# Allow direct execution
 if __name__ == "__main__":
     train()

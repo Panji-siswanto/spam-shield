@@ -1,48 +1,114 @@
+# Spam Shield 🍆💦
+Spam Shield is a spam detection system built using a hybrid machine learning approach.
+It combines classical text classification with modern transformer-based models to detect spam
+in chat messages and email-like text.
+
+The system supports **conversation-level context**, allowing multiple chat bubbles to be analyzed
+together instead of treating each message independently.
+
+Features
+
+- Naive Bayes (TF-IDF) spam classifier
+- DistilBERT-based deep learning classifier
+- Hybrid model combining NB + BERT
+- Conversation-context prediction
+- REST API built with FastAPI
+- Batch and single-message prediction
+- Locally trained models (no external inference)
+
+---
+
+Models
+1. Naive Bayes (TF-IDF)
+- Uses unigrams and bigrams
+- Effective for keyword-based spam detection
+- Fast and lightweight
+
+2. DistilBERT
+- Fine-tuned on spam/ham datasets
+- Captures semantic meaning
+- More conservative on ambiguous messages
+
+3. Hybrid Model
+- Combines NB and BERT probabilities
+- Uses OR-based escalation for contextual input
+- Reduces false negatives in chat-based spam
+
+---
+
+##  Conversation Context
+Instead of predicting a single message, Spam Shield can analyze
+multiple chat messages as one context:
+
+```json
+{
+  "messages": [
+    "Hi",
+    "Are you busy right now?",
+    "You have been selected for a free gift card",
+    "Act now before it expires"
+  ]
+}
+
+
+
+Project Structure
 spam-shield/
 │
-├── api/                          # FastAPI backend
-│   ├── main.py                   # API launcher
-│   ├── schemas.py                # Request/response schemas
-│   ├── nb_routes.py              # Naive Bayes endpoints
-│   ├── bert_routes.py            # BERT endpoints
-│   └── hybrid_routes.py          # Hybrid endpoints
+├── api/                    # FastAPI layer
+│   ├── __init__.py
+│   ├── main.py             # FastAPI app entry
+│   ├── nb_routes.py        # Naive Bayes endpoints
+│   ├── bert_routes.py      # BERT endpoints
+│   ├── hybrid_routes.py    # Hybrid endpoints
+│   └── schemas.py          # Request schemas
 │
-├── data/                         # Datasets (CSV)
+├── data/                   # Datasets (CSV)
 │   ├── email_text.csv
 │   ├── spam_ham_dataset.csv
 │   ├── spam_sms.csv
 │   └── train.csv
 │
-├── helpers/                      # Training utilities
+├── helpers/                # Training utilities (offline)
 │   ├── bert/
-│   │   ├── bert_trainer.py       # DistilBERT fine-tuning
-│   │   ├── dataset.py            # PyTorch Dataset
-│   │
+│   │   ├── bert_trainer.py
+│   │   └── dataset.py
 │   └── naive_bayes/
-│       ├── nb_trainer.py         # TF-IDF + MultinomialNB training
-│       └── evaluation.py         # Precision / Recall / F1 / Accuracy
+│       ├── nb_trainer.py
+│       └── evaluation.py
 │
-├── model/                        # Inference-only agents
-│   ├── nb_agent.py               # Naive Bayes agent
-│   ├── bert_agent.py             # DistilBERT agent
-│   └── hybrid_agent.py           # Hybrid agent
+├── model/                  # Inference-only agents
+│   ├── __init__.py
+│   ├── nb_agent.py
+│   ├── bert_agent.py
+│   └── hybrid_agent.py
 │
-├── output/                       # Model artifacts (gitignored)
-│   ├── naive_bayes/   
-│   │
-│   └── bert/
+├── utils/                  # Shared utilities
+│   ├── __init__.py
+│   └── context.py          # Conversation context builder
 │
-├── main_nb.py                    # Run NB prediction locally
-├── main_bert.py                  # Run BERT prediction locally
-├── main_hybrid.py                # Run Hybrid prediction locally
-├── train_all.py                  # Train all models
+├── output/                 # Trained models (gitignored)
+│   ├── bert/
+│   └── naive_bayes/
 │
-└──config.py                     # Global configuration
+├── config.py               # Global configuration
+├── train_all.py            # Train all models
+├── main_nb.py              # Local NB testing
+├── main_bert.py            # Local BERT testing
+├── main_hybrid.py          # Local Hybrid testing
+│
+├── README.md               # Project documentation
+├── pyproject.toml
+├── uv.lock
+├── .gitignore
+└── .python-version
 
-helpers/ -> training & preprocessing
-model/ -> inference only
-output/ -> generated models (not pushed to Git)
-config,py -> stores All paths and hyperparameters
+data/ → Datasets
+helpers/ -> training & preprocessing utils
+model/ -> inference for agents
+utils/ → Shared utilities (context builder)
+output/ -> generated training models (gitignored)
+config.py -> stores All paths and hyperparameters
 
 
 to run models:
