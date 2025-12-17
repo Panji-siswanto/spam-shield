@@ -11,12 +11,14 @@ class HybridAgent:
         bert = self.bert.predict_proba(text)
         nb = self.nb.predict_proba(text)
 
+        # base probabilities (start from BERT)
         spam = bert["spam"]
         ham = bert["ham"]
 
-        if nb["spam"] > 0.85:
-            spam = max(spam, 0.9)
-        if nb["ham"] > 0.85:
+        # reinforce by nb
+        if bert["spam"] > 0.6 or nb["spam"] > 0.7:
+            spam = max(spam, nb["spam"], bert["spam"], 0.9)
+        if bert["ham"] > 0.7 and nb["ham"] > 0.7:
             ham = max(ham, 0.9)
 
         if spam >= threshold:

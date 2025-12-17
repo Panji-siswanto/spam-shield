@@ -8,3 +8,7 @@ class TextRequest(BaseModel):
 
 class BatchTextRequest(BaseModel):
     texts: List[str]
+
+
+class ConversationRequest(BaseModel):
+    messages: List[str]
