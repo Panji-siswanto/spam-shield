@@ -1,8 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from model.hybrid_agent import HybridAgent
 from api.schemas import TextRequest, BatchTextRequest
 from api.schemas import ConversationRequest
 from utils.context import build_context
+import json
+import logging
+
+
+logger = logging.getLogger("uvicorn.error")
 
 router = APIRouter(prefix="/predict/hybrid", tags=["Hybrid"])
 
@@ -10,7 +15,12 @@ hybrid_agent = HybridAgent()
 
 
 @router.post("/")
-def predict_hybrid(req: TextRequest):
+async def predict_hybrid(req: TextRequest, request: Request):
+    raw_body = await request.body()
+    logger.error("RAW BODY RECEIVED: %s", raw_body)
+
+    logger.error("PARSED TEXT: %s", req.text)
+
     return hybrid_agent.predict(req.text)
 
 

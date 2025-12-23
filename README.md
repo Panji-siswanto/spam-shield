@@ -1,13 +1,4 @@
-# Spam Shield 🍆💦
-Spam Shield is a spam detection system built using a hybrid machine learning approach.
-It combines classical text classification with modern transformer-based models to detect spam
-in chat messages and email-like text.
-
-The system supports **conversation-level context**, allowing multiple chat bubbles to be analyzed
-together instead of treating each message independently.
-
-Features
-
+## Details Of Features
 - Naive Bayes (TF-IDF) spam classifier
 - DistilBERT-based deep learning classifier
 - Hybrid model combining NB + BERT
@@ -16,9 +7,8 @@ Features
 - Batch and single-message prediction
 - Locally trained models (no external inference)
 
----
 
-Models
+## Details of Agent Models
 1. Naive Bayes (TF-IDF)
 - Uses unigrams and bigrams
 - Effective for keyword-based spam detection
@@ -33,8 +23,6 @@ Models
 - Combines NB and BERT probabilities
 - Uses OR-based escalation for contextual input
 - Reduces false negatives in chat-based spam
-
----
 
 ##  Conversation Context
 Instead of predicting a single message, Spam Shield can analyze
@@ -52,7 +40,7 @@ multiple chat messages as one context:
 
 
 
-Project Structure
+## Project Structure
 spam-shield/
 │
 ├── api/                    # FastAPI layer
@@ -110,8 +98,26 @@ utils/ → Shared utilities (context builder)
 output/ -> generated training models (gitignored)
 config.py -> stores All paths and hyperparameters
 
+donwload and setup 'uv' for pyhton first before run, or convert the commands given to standard python instruction.
 
-to run models:
+to run:
+fresh after pull, train the agents first,
+run on terminal :
+"uv run python train_all.py"
+config for training can be found in config.py as '#BERT hyperparameters'
+and the train result is stored as .pkl file at 'output/'
+
+after training is done, initiate API.
+run on terminal : 
+"uv run uvicorn api.main:app --reload"
+press CTRL + C to shut it down
+
+by this point agents is set and APIs are ready to use.
+move to spam-shield-app ("https://github.com/Panji-siswanto/spam-shield-app")
+pull the repositories and run the programme, for details of it can be found it the files @README.md
+
+
+to test each models:
 naive bayes 
  "uv run python main_nb.py" /"python main_nb.py"
 DistilBERT 
@@ -119,13 +125,8 @@ DistilBERT
 Hybrid Model 
  "uv run python main_hybrid.py" / "python main_hybrid.py"
 
-on pull, the output folders will be empty and to initiate models training, run:
- "uv run python train_all.py"
-
 
 APIs:
-to initate:
- "uv run uvicorn api.api:app --reload"
 NB:
 POST http://127.0.0.1:8000/predict/nb
 BERT:

@@ -3,8 +3,8 @@ from helpers.bert.bert_trainer import train as train_bert
 
 
 def main():
-    # print("=== Training Naive Bayes ===")
-    # train_nb()
+    print("=== Training Naive Bayes ===")
+    train_nb()
 
     print("\n=== Training DistilBERT ===")
     train_bert()
